@@ -1,0 +1,5 @@
+Attempting to make software that can test the SMT enodings produced in https://github.com/bpfverif/ebpf-range-analysis-verification-cav23/tree/main/bpf-verification.
+
+Load the logic solver with the SMT encoding for a particular instruction and some abstract states and arguments for the instruction. Then see what the results are. Attempt to get the real verifier to these same abstract states and then run the instruction whose encoding is being tested. See if the verifier and the SMT encoding produce the same outcome.
+
+Once this is done, build a fuzzing software that will test random abstract states and instructions in order to verify the correctness of the SMT encodings.
