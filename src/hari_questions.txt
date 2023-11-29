@@ -1,0 +1,10 @@
+Hari 1-1 11/16 meeting notes:
+- Create your own abstract operators in C and run the CtoSMT stuff on it. Then do fuzzing on this
+  - would require a different infra for the C-test of the abstract operator, but SMT part would be pretty much the same.
+  - some big questions here would be how to choose domains and operators. Maybe do it for something simple first and then come up with a more complex domain later.
+- Fuzzing the verifier itself
+  - For the parsing, maye switch out the print_verifier_state for an easier to parse function, then recompile the kernel and use that in verification. This rids us of problem of changing output for verifier log.
+
+- next steps 
+  - start messing around with the llvm2smt stuff using my own C code
+  - play around with the SMT encodings of the abstract operators, start manually doing some checking to understand how to implement this later.
