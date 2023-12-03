@@ -75,8 +75,8 @@ bpf_prog gen_prog(abstract_register_state *state, struct bpf_insn test_insn)
 int main(int argc, char **argv)
 {
 	abstract_register_state state[] = {
-		{.mask = 0, .value = 0}, // reg 0
-		{.mask = 0, .value = 0}, // reg 1
+		{.mask = 0xffffffffffffffff, .value = 0}, // reg 0
+		{.mask = 0xffffffffffffffff, .value = 0}, // reg 1
 		{.mask = 0xffffffffffffffff, .value = 10}, // reg 2
 		{.mask = 0xffffffffffffffff, .value = 10}, // reg 3
 		{.mask = 0xffffffffffffffff, .value = 10}, // reg 4

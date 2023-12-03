@@ -4,6 +4,10 @@
 
 #include "parse.h"
 
+/* 
+ *
+ */
+
 token *scan_log(char *verifier_log)
 {
 	// evaluate content between from "; " to "\n"

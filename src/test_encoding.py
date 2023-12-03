@@ -3,14 +3,11 @@ import json
 from lib_reg_bounds_tracking import *
 
 """
-First, load in the SMT formula.
+1. Depending on version we need different json offset
+2. The jump instructions require a different set up
+3. ALU instrucitons need a different setup
 
-Then, add some constraints saying that the variables specified in the 
-json are some particular values.
-
-Finally, add a constraint that says "there exists c such that g(a, b) = c" and solve the satisfiability in order to get c
 """
-
 def main():
     s = Optimize()
     smt_file = "/home/ebpf_verifier_hardening/bpf-encodings/5.9/BPF_ADD_32.smt2"
@@ -38,12 +35,16 @@ def main():
     
     json_off = 5
     
+    # update bv mapping handles no 32-bit valus for version less than 5.73c1
     input_dst_reg.update_bv_mappings(in_json_bpf_enc_mapping["dst_reg"][json_off:], "5.9")
     input_src_reg.update_bv_mappings(in_json_bpf_enc_mapping["src_reg"][json_off:], "5.9")
     output_dst_reg.update_bv_mappings(out_json_bpf_enc_mapping["dst_reg"][json_off:], "5.9")
     
-    s.add(input_dst_reg.singleton(19))
-    s.add(input_src_reg.singleton(11))
+    # s.add(input_dst_reg.singleton(19))
+    # s.add(input_src_reg.singleton(11))
+    
+    s.add(input_dst_reg.fully_unknown())
+    s.add(input_src_reg.fully_unknown())
     
     print(s.check())
     print(s.model()[output_dst_reg.var_off_value])
