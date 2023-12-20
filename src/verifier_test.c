@@ -50,10 +50,9 @@ bpf_prog gen_prog(abstract_register_state *state, struct bpf_insn test_insn)
 		}
 		else
 		{
-			num_insns += 3;
+			num_insns += 2;
 			prog.insns = realloc(prog.insns, bpf_insn_size * num_insns);
-			prog.insns[num_insns-3] = BPF_MOV64_IMM(regs[i], 0);
-			prog.insns[num_insns-2] = BPF_ALU64_IMM(BPF_NEG, regs[i], 0);
+			prog.insns[num_insns-2] = BPF_MOV64_IMM(regs[i], 0);
 			prog.insns[num_insns-1] = BPF_ALU64_IMM(BPF_NEG, regs[i], 0);
 		}
 	}
@@ -75,8 +74,8 @@ bpf_prog gen_prog(abstract_register_state *state, struct bpf_insn test_insn)
 int main(int argc, char **argv)
 {
 	abstract_register_state state[] = {
-		{.mask = 0xffffffffffffffff, .value = 0}, // reg 0
-		{.mask = 0xffffffffffffffff, .value = 0}, // reg 1
+		{.mask = 0x0, .value = 0}, // reg 0
+		{.mask = 0xffffffffffffffff, .value = 100}, // reg 1
 		{.mask = 0xffffffffffffffff, .value = 10}, // reg 2
 		{.mask = 0xffffffffffffffff, .value = 10}, // reg 3
 		{.mask = 0xffffffffffffffff, .value = 10}, // reg 4
@@ -86,14 +85,15 @@ int main(int argc, char **argv)
 		{.mask = 0xffffffffffffffff, .value = 10}, // reg 8
 		{.mask = 0xffffffffffffffff, .value = 10}, // reg 9
 	};
-	struct bpf_insn test_insn = BPF_MOV64_IMM(BPF_REG_0, 0);
+
+	struct bpf_insn test_insn = BPF_ALU64_REG(0, BPF_REG_0, BPF_REG_1);
 	
 	bpf_prog prog = gen_prog(state, test_insn);
 	int prog_fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, prog.insns, prog.size, "GPL", 0);
 
 	printf("VERIFIER LOG:\n%s", bpf_log_buf);
 
-	printf("LOG LEN: %d\n", strlen(bpf_log_buf));
+	printf("LOG LEN: %ld\n", strlen(bpf_log_buf));
 	
 	if (prog_fd < 0)
 	{

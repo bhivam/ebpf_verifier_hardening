@@ -400,6 +400,21 @@ class bpf_register:
             self.s32_max_value 	== S32_MAX,
             self.u32_min_value 	== U32_MIN, 
             self.u32_max_value 	== U32_MAX)
+        
+    def check_uniqueness(self, s):
+        model = s.model()
+        return Not(And(
+            self.var_off_value == model[self.var_off_value],
+            self.var_off_mask == model[self.var_off_mask],
+            self.smin_value == model[self.smin_value],
+            self.smax_value == model[self.smax_value],
+            self.umin_value == model[self.umin_value],
+            self.umax_value == model[self.umax_value],
+            self.s32_min_value	== model[self.s32_min_value],
+            self.s32_max_value 	== model[self.s32_max_value],
+            self.u32_min_value 	== model[self.u32_min_value], 
+            self.u32_max_value 	== model[self.u32_max_value]))
+
 
 
 #class to keep track of process statistics
